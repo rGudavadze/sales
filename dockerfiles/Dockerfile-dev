@@ -1,0 +1,23 @@
+FROM python:3.10
+
+ENV PYTHONUNBUFFERED 1
+
+RUN mkdir -p /opt/app
+WORKDIR /opt/app
+
+COPY requirements.txt /opt/app/
+
+RUN pip install --upgrade pip && pip install -r requirements.txt --no-cache-dir
+
+COPY . /opt/app/
+
+RUN useradd -ms /bin/bash sales
+RUN chown -R sales:sales /opt/app
+
+ADD scripts/docker-entrypoint-dev.sh /home/sales/docker-entrypoint-dev.sh
+ADD scripts/check_service.py /home/sales/check_service.py
+
+RUN chmod +x /home/sales/docker-entrypoint-dev.sh
+USER sales
+
+ENTRYPOINT ["/home/sales/docker-entrypoint-dev.sh"]
