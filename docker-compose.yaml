@@ -1,0 +1,33 @@
+version: '3.9'
+
+
+services:
+  sales_pgdb:
+    image: "postgres:14.3"
+    container_name: sales_db
+    env_file:
+      - env/.env.dev
+    ports:
+      - "5434:5432"
+    volumes:
+      - sales_data:/var/lib/postgresql/data
+
+  sales_api:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile-dev
+    container_name: sales_api
+    env_file:
+      - env/.env.dev
+    volumes:
+      - ./:/opt/app
+    depends_on:
+      - sales_pgdb
+    entrypoint: ""
+    command: /home/sales/docker-entrypoint-dev.sh
+    ports:
+      - "8003:8000"
+
+
+volumes:
+  sales_data:
