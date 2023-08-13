@@ -42,3 +42,4 @@ class MarginDetailAPIView(RetrieveUpdateAPIView):
 
     serializer_class = MarginSerializer
     queryset = Margin.objects.all()
+    http_method_names = ("get", "patch")
