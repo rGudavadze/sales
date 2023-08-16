@@ -1,8 +1,21 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
-from apps.orders.models import Order
-from apps.orders.serializers import OrderCreateSerializer, OrderSerializer
+from apps.orders.models import InventoryForSale, Order
+from apps.orders.serializers import (
+    InventoryForSaleSerializer,
+    OrderCreateSerializer,
+    OrderSerializer,
+)
+
+
+class InventoryForSaleAPIView(ListCreateAPIView):
+    """
+    APIView to create product that are for sale or list all of them.
+    """
+
+    serializer_class = InventoryForSaleSerializer
+    queryset = InventoryForSale.objects.all()
 
 
 class OrderListAPIView(ListCreateAPIView):
