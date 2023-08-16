@@ -1,6 +1,18 @@
 from rest_framework import serializers
 
-from apps.orders.models import Margin, Order
+from apps.orders.helpers import exit_inventory_from_warehouse
+from apps.orders.models import InventoryForSale, Order
+
+
+class InventoryForSaleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InventoryForSale
+        fields = (
+            "id",
+            "inventory_id",
+            "price",
+        )
+        extra_kwargs = {"id": {"read_only": True}}
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -9,17 +21,30 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "customer",
-            "product_id",
             "quantity",
-            "price",
+            "inventory",
         )
 
 
-class MarginSerializer(serializers.ModelSerializer):
+class OrderCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Margin
+        model = Order
         fields = (
             "id",
-            "country_id",
-            "percent",
+            "customer",
+            "quantity",
+            "inventory",
         )
+        extra_kwargs = {"id": {"read_only": True}}
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+
+        inventory_id = attrs.get("inventory").id
+        quantity = attrs.get("quantity")
+
+        exit_data = exit_inventory_from_warehouse(inventory_id, quantity)
+
+        self.context["cost"] = exit_data.get("cost")
+
+        return attrs
