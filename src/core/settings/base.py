@@ -150,6 +150,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "utils.permissions.IsAuthenticated",
     ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
@@ -157,8 +158,8 @@ JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 JWT_ALGORITHM = "HS256"
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Warehouse API",
-    "DESCRIPTION": "API for microbrewery warehouse",
+    "TITLE": "Sales API",
+    "DESCRIPTION": "API for microbrewery sales",
     "VERSION": "0.0.1",
     "EXCLUDE_PATH": [],
 }
