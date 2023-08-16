@@ -38,7 +38,6 @@ THIRD_PARTY_APPS = [
 
 OUR_APPS = [
     "apps.base",
-    "apps.customers",
     "apps.orders",
 ]
 

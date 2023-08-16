@@ -5,6 +5,5 @@ from core.spectacular import urlpatterns as swagger_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("customers/", include("apps.customers.urls")),
     path("orders/", include("apps.orders.urls")),
 ] + swagger_urls

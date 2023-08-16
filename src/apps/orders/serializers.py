@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.orders.models import Margin, Order
+from apps.orders.models import Order
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -12,14 +12,4 @@ class OrderSerializer(serializers.ModelSerializer):
             "product_id",
             "quantity",
             "price",
-        )
-
-
-class MarginSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Margin
-        fields = (
-            "id",
-            "country_id",
-            "percent",
         )

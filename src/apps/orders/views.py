@@ -1,11 +1,7 @@
-from rest_framework.generics import (
-    ListCreateAPIView,
-    RetrieveAPIView,
-    RetrieveUpdateAPIView,
-)
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 
-from apps.orders.models import Margin, Order
-from apps.orders.serializers import MarginSerializer, OrderSerializer
+from apps.orders.models import Order
+from apps.orders.serializers import OrderSerializer
 
 
 class OrderListAPIView(ListCreateAPIView):
@@ -24,22 +20,3 @@ class OrderDetailAPIView(RetrieveAPIView):
 
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
-
-
-class MarginListAPIView(ListCreateAPIView):
-    """
-    APIView to create margin or list all the margins.
-    """
-
-    serializer_class = MarginSerializer
-    queryset = Margin.objects.all()
-
-
-class MarginDetailAPIView(RetrieveUpdateAPIView):
-    """
-    APIView to get or update specific margin.
-    """
-
-    serializer_class = MarginSerializer
-    queryset = Margin.objects.all()
-    http_method_names = ("get", "patch")
