@@ -161,5 +161,5 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Sales API",
     "DESCRIPTION": "API for microbrewery sales",
     "VERSION": "0.0.1",
-    "EXCLUDE_PATH": [],
+    "PREPROCESSING_HOOKS": ["core.spectacular.preprocessing_filter_spec"],
 }
