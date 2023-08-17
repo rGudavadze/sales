@@ -163,3 +163,8 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "0.0.1",
     "PREPROCESSING_HOOKS": ["core.spectacular.preprocessing_filter_spec"],
 }
+
+MICROSERVICES = {
+    "warehouse": os.environ.get("ACCOUNTING"),
+    "auth-service": os.environ.get("AUTH_SERVICE"),
+}
