@@ -165,6 +165,6 @@ SPECTACULAR_SETTINGS = {
 }
 
 MICROSERVICES = {
-    "warehouse": os.environ.get("ACCOUNTING"),
+    "warehouse": os.environ.get("WAREHOUSE"),
     "auth-service": os.environ.get("AUTH_SERVICE"),
 }
