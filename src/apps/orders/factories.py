@@ -1,12 +1,13 @@
 import uuid
+from decimal import Decimal
 
 import factory
 from factory.django import DjangoModelFactory
 
 
 class InventoryForSaleFactory(DjangoModelFactory):
-    inventory_id = uuid.uuid4()
-    price = factory.Faker("pyint")
+    inventory_id = factory.Faker("uuid4")
+    price = Decimal(5)
 
     class Meta:
         model = "orders.InventoryForSale"
