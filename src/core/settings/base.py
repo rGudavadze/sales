@@ -168,3 +168,10 @@ MICROSERVICES = {
     "warehouse": os.environ.get("WAREHOUSE"),
     "auth-service": os.environ.get("AUTH_SERVICE"),
 }
+
+RABBITMQ_CREDS = {
+    "host": os.environ.get("RABBITMQ_HOST"),
+    "port": os.environ.get("RABBITMQ_PORT"),
+    "username": os.environ.get("RABBITMQ_USER"),
+    "password": os.environ.get("RABBITMQ_PASSWORD"),
+}
