@@ -46,7 +46,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         attrs = super().validate(attrs)
 
-        inventory_id = attrs.get("inventory").id
+        inventory_id = attrs.get("inventory").inventory_id
         quantity = attrs.get("quantity")
 
         exit_data = exit_inventory_from_warehouse(
