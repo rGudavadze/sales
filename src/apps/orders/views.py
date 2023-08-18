@@ -10,6 +10,7 @@ from apps.orders.serializers import (
     OrderCreateSerializer,
     OrderSerializer,
 )
+from utils.logger import logger
 from utils.rabbitmq_client import rabbitmq_client
 
 
@@ -40,6 +41,8 @@ class OrderListAPIView(ListCreateAPIView):
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        logger.info(f"New order ({serializer.data.get('id')}) has been confirmed.")
 
         inventory_for_sale = InventoryForSale.objects.filter(
             id=serializer.data.get("inventory")
