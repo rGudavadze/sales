@@ -1,3 +1,5 @@
+import json
+from decimal import Decimal
 from uuid import UUID
 
 from django.conf import settings
@@ -33,11 +35,14 @@ def exit_inventory_from_warehouse(request: Request, inventory_id: UUID, amount: 
     if it is inventory will be reduced in warehouse
     """
 
-    request_data = {"inventory_id": inventory_id, "amount": amount}
+    request_data = {"inventory": inventory_id, "amount": amount}
 
-    url = f"{settings.MICROSERVICES.get('warehouse')}/warehouse/inventory/exit/"
+    url = f"{settings.MICROSERVICES.get('warehouse')}/inventory/exit/"
 
     response = http_request.post(url=url, data=request_data, headers=request.headers)
+
+    if response.status_code == status.HTTP_404_NOT_FOUND:
+        raise InventoryNotFoundException()
 
     if response.status_code == status.HTTP_400_BAD_REQUEST:
         raise InventoryAvailabilityException()
@@ -45,4 +50,12 @@ def exit_inventory_from_warehouse(request: Request, inventory_id: UUID, amount: 
     if response.status_code == status.HTTP_401_UNAUTHORIZED:
         raise AuthenticationException()
 
-    return response.content
+    return json.loads(response.content.decode("utf-8"))
+
+
+def convert_uuids_to_strings(data: dict) -> dict:
+    for k, v in data.items():
+        if isinstance(v, UUID) or isinstance(v, Decimal):
+            data[k] = str(v)
+
+    return data
