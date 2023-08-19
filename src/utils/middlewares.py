@@ -46,7 +46,7 @@ class AuthMiddleware:
                 key=settings.JWT_SECRET_KEY,
                 algorithms=[settings.JWT_ALGORITHM],
             )
-            user_info = payload
+            user_info = payload.get("sub")
 
         except jwt.DecodeError:
             return AuthenticationFailed(json.dumps({"detail": "Token is invalid."}))
