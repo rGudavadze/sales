@@ -161,5 +161,42 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Sales API",
     "DESCRIPTION": "API for microbrewery sales",
     "VERSION": "0.0.1",
-    "EXCLUDE_PATH": [],
+    "PREPROCESSING_HOOKS": ["core.spectacular.preprocessing_filter_spec"],
+}
+
+MICROSERVICES = {
+    "warehouse": os.environ.get("WAREHOUSE"),
+    "auth-service": os.environ.get("AUTH_SERVICE"),
+}
+
+RABBITMQ_CREDS = {
+    "host": os.environ.get("RABBITMQ_HOST"),
+    "port": os.environ.get("RABBITMQ_PORT"),
+    "username": os.environ.get("RABBITMQ_USER"),
+    "password": os.environ.get("RABBITMQ_PASSWORD"),
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "custom_formatter": {"format": "[{asctime}] {levelname} {message}", "style": "{"}
+    },
+    "handlers": {
+        "custom_handler": {
+            "class": "logging.StreamHandler",
+            "formatter": "custom_formatter",
+        },
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": "info.log",
+            "formatter": "custom_formatter",
+        },
+    },
+    "loggers": {
+        "logger": {
+            "handlers": ["custom_handler", "file"],
+            "level": "DEBUG",
+        }
+    },
 }

@@ -1,25 +1,61 @@
+import json
+from decimal import Decimal
+from uuid import UUID
+
+from django.conf import settings
 from rest_framework import status
+from rest_framework.request import Request
 
-from utils.exceptions import InventoryAvailabilityException
+from utils.exceptions import (
+    AuthenticationException,
+    InventoryAvailabilityException,
+    InventoryNotFoundException,
+)
+from utils.http_client import http_request
 
 
-def exit_inventory_from_warehouse(inventory_id, amount):
+def check_inventory(request: Request, inventory_id: UUID):
     """
-    This method will check if inventory is available and
-        if it is inventory will be reduced in warehouse
+    This method checks if inventory exists.
     """
 
-    # TODO: http request will be implemented later.
+    url = f"{settings.MICROSERVICES.get('warehouse')}/inventory/{inventory_id}/"
+    response = http_request.get(url=url, headers=request.headers)
 
-    status_code = 200
-    data = {
-        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "inventory": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "amount": "8.1",
-        "cost": 5,
-    }
+    if response.status_code == status.HTTP_404_NOT_FOUND:
+        raise InventoryNotFoundException()
 
-    if status_code == status.HTTP_400_BAD_REQUEST:
+    if response.status_code == status.HTTP_401_UNAUTHORIZED:
+        raise AuthenticationException()
+
+
+def exit_inventory_from_warehouse(request: Request, inventory_id: UUID, amount: UUID):
+    """
+    This method checks if inventory is available and
+    if it is inventory will be reduced in warehouse
+    """
+
+    request_data = {"inventory": inventory_id, "amount": amount}
+
+    url = f"{settings.MICROSERVICES.get('warehouse')}/inventory/exit/"
+
+    response = http_request.post(url=url, data=request_data, headers=request.headers)
+
+    if response.status_code == status.HTTP_404_NOT_FOUND:
+        raise InventoryNotFoundException()
+
+    if response.status_code == status.HTTP_400_BAD_REQUEST:
         raise InventoryAvailabilityException()
+
+    if response.status_code == status.HTTP_401_UNAUTHORIZED:
+        raise AuthenticationException()
+
+    return json.loads(response.content.decode("utf-8"))
+
+
+def convert_uuids_to_strings(data: dict) -> dict:
+    for k, v in data.items():
+        if isinstance(v, UUID) or isinstance(v, Decimal):
+            data[k] = str(v)
 
     return data
